@@ -1,7 +1,16 @@
 import time
 import psutil
 import matplotlib.pyplot as plt
+import os
 
+# Функция создания списка файлов в папке
+def create_list_files(path):
+    path_files = []
+    for file in os.listdir(path):
+        name = os.path.join(path, file)
+        path_files.append(name)
+    print(path_files)
+    return path_files
 # Функция определении времени работы кода
 class timex:
     def __enter__(self):
@@ -11,6 +20,14 @@ class timex:
     def __exit__(self, type, value, traceback):
         # Вывод времени работы
         print('Время обработки: {:.2f} с'.format(time.time() - self.t))
+def show_images_list_torch(list):
+    count = len(list)
+    figure, axs = plt.subplots(count, 1, figsize=(25, 15 * count))
+    for i in range(count):
+        axs[i].set_title(f'{i + 1} картинка')
+        axs[i].imshow(list[i].transpose(0, 2).transpose(0, 1))
+        axs[i].axis('off')
+    plt.show()
 
 # Функция отображения 2 видов картинок
 def show_images(orig, mod, names, figsize=(25, 30)):
@@ -60,3 +77,18 @@ def show_part(arr_img, parts):
 def Memory_Usage():
     memory_usage = round(psutil.Process().memory_info().rss / 1024 / 1024, 2)
     print(f"Объем оперативной памяти, занимаемый выполнением кода: {memory_usage} мб")
+
+# Отображения оригинальной картинки и предсказанной
+def show_orig_pred(orig, pred):
+    orig = orig.numpy().transpose(1, 2, 0)
+    pred = pred.to('cpu').detach().numpy()[0].transpose(1, 2, 0)
+    figure, axs = plt.subplots(1, 2, figsize=(10, 20))
+
+    axs[0].set_title('оригинальная картинка')
+    axs[0].imshow(orig)
+    axs[0].axis('off')
+
+    axs[1].set_title('Предсказанная')
+    axs[1].imshow(pred)
+    axs[1].axis('off')
+    plt.show()
