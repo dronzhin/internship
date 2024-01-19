@@ -11,6 +11,13 @@ def create_list_files(path):
         path_files.append(name)
     print(path_files)
     return path_files
+# Функция создания списка файлов в папке и подпапках
+def get_all_files_in_directory(root_dir):
+    file_list = []
+    for root, directories, files in os.walk(root_dir):
+        for file in files:
+            file_list.append(os.path.join(root, file))
+    return file_list
 # Функция определении времени работы кода
 class timex:
     def __enter__(self):

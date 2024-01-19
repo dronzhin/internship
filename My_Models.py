@@ -53,4 +53,4 @@ class Model_autoencoder_Conv(nn.Module):
   def forward(self, x):
     encoder = self.encode(x)
     decoder = self.decode(encoder)
-    return decoder
+    return decoder, encoder
