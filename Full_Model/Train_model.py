@@ -28,6 +28,7 @@ for i in range(number_parts):
 
 # autoencoder = torch.load('autoencoder_new.pkl').to(device)
 autoencoder = torch.load('autoencoder_640-360.pkl')
+autoencoder.to('cpu')
 # autoencoder = torch.load('autoencoder.pkl')
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(autoencoder.parameters(), lr=0.0001)
@@ -53,7 +54,7 @@ for epoch in range(1):
                                                               batch_size=batch_size,
                                                               shuffle=True)
                 for i, images in enumerate(trainLoader):
-                    images = images.to(device)
+                    #images = images.to(device)
                     optimizer.zero_grad()  # обнуляем градиент
                     outputs, _ = autoencoder(images)  # делаем предсказание
                     loss = criterion(outputs, images)  # считаем ошибку
