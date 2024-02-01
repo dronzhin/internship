@@ -99,3 +99,32 @@ def show_orig_pred(orig, pred):
     axs[1].imshow(pred)
     axs[1].axis('off')
     plt.show()
+
+import supervision as sv
+def jolo_convert(arr):
+    # Альтернативная визуализация через supervision - только для детекций
+    box_annotator = sv.BoxAnnotator(
+        thickness=2,  # задает толщину границ рамок, которые будут наложены на изображение с объектами.
+        text_thickness=2,  # задает толщину шрифта для надписей, которые будут отображаться внутри рамок с объектами.
+        text_scale=1  # масштабирует шрифт для надписей на изображении.
+    )
+
+    # получение обнаруженных объектов с помощью функции from_yolov8(res)
+    detections = sv.Detections.from_yolov8(res)
+
+    # создание надписей для каждого обнаруженного объекта на изображении
+    labels = [
+        f"{model.model.names[class_id]} {confidence:0.2f}"
+        for _, _, confidence, class_id, _
+        in detections
+    ]
+
+    # наложение рамок и надписей на изображение
+    frame = box_annotator.annotate(
+        scene=res.orig_img,  # исходное изображение, на которое будут наложены рамки и надписи.
+        detections=detections,  # список обнаруженных объектов в формате, который требуется BoxAnnotator.
+        labels=labels  # список надписей для каждого обнаруженного объекта.
+    )
+
+    # инвертируем цвет в RGB для отображения
+    Image.fromarray(frame[:, :, ::-1])

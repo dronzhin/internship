@@ -1,0 +1,4 @@
+train: C:\internship\Experiments\train
+val: C:\internship\Experiments\val
+nc: 4
+names: ["foundation", "сonstruction", "finishing", "new_building"]
